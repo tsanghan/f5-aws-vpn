@@ -16,8 +16,11 @@ It also serves as a reference implementation.
 #### F5 BIG-IPs:
 * Two F5 BIG-IPs running Local Traffic Manager (LTM)
   * The two BIG-IPs referred to in this repo are your "on-prem customer gateways")
-  * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) could not sit behind a NAT (which precluded testing with BIG-IP VEs in AWS). *UPDATE: AWS VPN now Supports NAT-T. 
-* Software version == BIG-IP v12.0.0+*
+  * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) could not sit behind a NAT (which precluded testing with BIG-IP VEs in AWS). 
+  	*UPDATE*: AWS VPN now supports [NAT-T](https://aws.amazon.com/blogs/aws/ec2-vpc-vpn-update-nat-traversal-additional-encryption-options-and-more/) so you can:
+  		* Remove the publicly routable self-IPs
+  		* Change the tunnel local-address to a private address (ex. external self-ip) 
+* Software version == BIG-IP v12.0.0+
   * Versions Tested so far: 
   	* BIG-IP v12.0.0 Build 0.0.606
 * In order to run above playbooks
@@ -402,13 +405,13 @@ For complete example configs of a clustered pair, see the example-configs direct
     bigstart restart tmipsecd
 	```  
 
-	HINT: As a convenience, AWS also generates configs for above. *VPN Connections -> Download Config -> Vendor -> Select F5 Networks, Inc.*
+	**HINT:** As a convenience, AWS also generates configs for above. *VPN Connections -> Download Config -> Vendor -> Select F5 Networks, Inc.*
 
 
-	Disclaimer: you need to add one additional parameter *nat-traversal on* to the ike-peer configs provided:
+	Disclaimer: you need to add one additional parameter **nat-traversal on** to the ike-peer configs provided:
 
 	```
-	create net ipsec ike-peer PEER-NAME *nat-traversal on*  ....
+	create net ipsec ike-peer PEER-NAME nat-traversal on  ....
 	``` 
 
 
