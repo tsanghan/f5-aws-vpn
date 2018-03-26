@@ -17,7 +17,8 @@ It also serves as a reference implementation.
 * Two F5 BIG-IPs running Local Traffic Manager (LTM)
   * The two BIG-IPs referred to in this repo are your "on-prem customer gateways")
   * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) could not sit behind a NAT (which precluded testing with BIG-IP VEs in AWS). 
-  	*UPDATE*: AWS VPN now supports [NAT-T](https://aws.amazon.com/blogs/aws/ec2-vpc-vpn-update-nat-traversal-additional-encryption-options-and-more/) so you can:
+  
+  	***UPDATE***: AWS VPN now supports [NAT-T](https://aws.amazon.com/blogs/aws/ec2-vpc-vpn-update-nat-traversal-additional-encryption-options-and-more/) so you can:
   		* Remove the publicly routable self-IPs
   		* Change the tunnel local-address to a private address (ex. external self-ip) 
 * Software version == BIG-IP v12.0.0+
@@ -130,11 +131,15 @@ For complete example configs of a clustered pair, see the example-configs direct
 
 	Unique Self-IPs (customize per device):
 	```
-	create net self 208.85.211.57 address 208.85.211.57/28 traffic-group traffic-group-local-only vlan external
-
 	create net self 10.12.0.57 address 10.12.0.57/16 allow-service default traffic-group traffic-group-local-only vlan external
 
 	create net self 10.3.0.2 address 10.3.0.2/16 allow-service default traffic-group traffic-group-local-only vlan internal
+	
+	If not using NAT-T:
+
+	```
+	create net self 208.85.211.57 address 208.85.211.57/28 traffic-group traffic-group-local-only vlan external
+
 	```
 
 	On bigip-01: (will sync when clustered)
@@ -276,6 +281,14 @@ For complete example configs of a clustered pair, see the example-configs direct
 
 	create net tunnels tunnel aws_conn_2_tun_2 local-address 208.85.211.58 mtu 1436 profile aws_conn_2_tun_2_profile remote-address 54.200.79.6
 	```
+
+	If using NAT-T, use the private external self-IP as the local-address. ex.
+
+	```
+	create net tunnels tunnel aws_conn_1_tun_1 local-address 10.12.0.56 mtu 1436 profile aws_conn_1_tun_1_profile remote-address 52.24.244.82
+
+	```
+
 
 14. Configure Tunnel Self-IPs (customize per each device as will NOT sync). ex.
 
