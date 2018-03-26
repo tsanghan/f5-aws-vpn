@@ -73,8 +73,8 @@ modify sys db ipsec.if.checkpolicy { value "disable" }
 modify sys db connection.vlankeyed { value "disable" } 
 
 # Configure IKE Peers
-create net ipsec ike-peer aws_vpn_conn_1_peer_1 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.24.244.82 verify-cert true version add { v1 } preshared-key <key>
-create net ipsec ike-peer aws_vpn_conn_1_peer_2 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.19.43 verify-cert true version add { v1 } preshared-key <key> 
+create net ipsec ike-peer aws_vpn_conn_1_peer_1 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.24.244.82 verify-cert true version add { v1 } preshared-key <key>
+create net ipsec ike-peer aws_vpn_conn_1_peer_2 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.19.43 verify-cert true version add { v1 } preshared-key <key> 
 
 # Configure IPSEC Policy
 create net ipsec ipsec-policy AWS_IPSEC_Interface_Policy ike-phase2-auth-algorithm sha1 ike-phase2-encrypt-algorithm aes128 ike-phase2-lifetime 60 ike-phase2-perfect-forward-secrecy modp1024 mode interface

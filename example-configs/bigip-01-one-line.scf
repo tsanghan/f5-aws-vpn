@@ -61,10 +61,10 @@ net fdb tunnel /Common/socks-tunnel { }
 net fdb vlan /Common/external { }
 net fdb vlan /Common/internal { }
 net ipsec ike-daemon /Common/ikedaemon { }
-net ipsec ike-peer /Common/aws_vpn_conn_1_peer_1 { lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.24.244.82 verify-cert true version { v1 } }
-net ipsec ike-peer /Common/aws_vpn_conn_1_peer_2 { lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.25.19.43 verify-cert true version { v1 } }
-net ipsec ike-peer /Common/aws_vpn_conn_2_peer_1 { lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.25.240.97 verify-cert true version { v1 } }
-net ipsec ike-peer /Common/aws_vpn_conn_2_peer_2 { lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 54.200.79.6 verify-cert true version { v1 } }
+net ipsec ike-peer /Common/aws_vpn_conn_1_peer_1 { lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.24.244.82 verify-cert true version { v1 } }
+net ipsec ike-peer /Common/aws_vpn_conn_1_peer_2 { lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.25.19.43 verify-cert true version { v1 } }
+net ipsec ike-peer /Common/aws_vpn_conn_2_peer_1 { lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 52.25.240.97 verify-cert true version { v1 } }
+net ipsec ike-peer /Common/aws_vpn_conn_2_peer_2 { lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 preshared-key-encrypted XXXXXXXX remote-address 54.200.79.6 verify-cert true version { v1 } }
 net ipsec ipsec-policy /Common/AWS_IPSEC_Interface_Policy { ike-phase2-auth-algorithm sha1 ike-phase2-encrypt-algorithm aes128 ike-phase2-lifetime 60 ike-phase2-perfect-forward-secrecy modp1024 mode interface }
 net ipsec traffic-selector /Common/aws_conn_1_tun_1_selector { destination-address 169.254.12.44/30 ipsec-policy /Common/AWS_IPSEC_Interface_Policy source-address 169.254.12.44/30 }
 net ipsec traffic-selector /Common/aws_conn_1_tun_2_selector { destination-address 169.254.12.28/30 ipsec-policy /Common/AWS_IPSEC_Interface_Policy source-address 169.254.12.28/30 }

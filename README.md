@@ -16,8 +16,8 @@ It also serves as a reference implementation.
 #### F5 BIG-IPs:
 * Two F5 BIG-IPs running Local Traffic Manager (LTM)
   * The two BIG-IPs referred to in this repo are your "on-prem customer gateways")
-  * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) can not sit behind a NAT (which precludes testing with BIG-IP VEs in AWS).
-* Software version == BIG-IP v12.0.0+
+  * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) could not sit behind a NAT (which precluded testing with BIG-IP VEs in AWS). *UPDATE: AWS VPN now Supports NAT-T. 
+* Software version == BIG-IP v12.0.0+*
   * Versions Tested so far: 
   	* BIG-IP v12.0.0 Build 0.0.606
 * In order to run above playbooks
@@ -145,7 +145,7 @@ For complete example configs of a clustered pair, see the example-configs direct
 
 	Forwarding Virtual Server:
 	```
-	create ltm profile fastL4 fastL4-test loose-close enabled loose-initialization enabled reset-on-timeout disabled
+	create ltm profile fastL4 fastL4-route-friendly loose-close enabled loose-initialization enabled reset-on-timeout disabled
 
 	create ltm virtual vs_outbound destination 0.0.0.0:any ip-forward profiles add { fastL4-route-friendly }
 	```
@@ -206,13 +206,13 @@ For complete example configs of a clustered pair, see the example-configs direct
 
 	On bigip-01: (will sync when clustered) 
 	```
-	create net ipsec ike-peer aws_vpn_conn_1_peer_1 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.24.244.82 verify-cert true version add { v1 } preshared-key <key>
+	create net ipsec ike-peer aws_vpn_conn_1_peer_1 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.24.244.82 verify-cert true version add { v1 } preshared-key <key>
 
-	create net ipsec ike-peer aws_vpn_conn_1_peer_2 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.19.43 verify-cert true version add { v1 } preshared-key <key> 
+	create net ipsec ike-peer aws_vpn_conn_1_peer_2 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.19.43 verify-cert true version add { v1 } preshared-key <key> 
 
-	create net ipsec ike-peer aws_vpn_conn_2_peer_1 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.240.97 verify-cert true version add { v1 } preshared-key <key>
+	create net ipsec ike-peer aws_vpn_conn_2_peer_1 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 52.25.240.97 verify-cert true version add { v1 } preshared-key <key>
 
-	create net ipsec ike-peer aws_vpn_conn_2_peer_2 lifetime 480 my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 54.200.79.6 verify-cert true version add { v1 } preshared-key <key>
+	create net ipsec ike-peer aws_vpn_conn_2_peer_2 lifetime 480 nat-traversal on my-id-type address peers-id-type address phase1-auth-method pre-shared-key phase1-encrypt-algorithm aes128 remote-address 54.200.79.6 verify-cert true version add { v1 } preshared-key <key>
 
 	```
 
@@ -355,8 +355,8 @@ For complete example configs of a clustered pair, see the example-configs direct
 	On each device:
 	```
 	modify net route-domain 0 routing-protocol add { BGP }
-	```
- 
+	``` 
+	
 	Optionally, you can enable BGP and then configure from imish (the ZebOS shell).
 
 	For more information: See https://support.f5.com/kb/en-us/products/big-ip_ltm/manuals/product/tmos-routing-administration-12-0-0/11.html#unique_1718224504 
@@ -385,6 +385,31 @@ For complete example configs of a clustered pair, see the example-configs direct
 	```
 	cm traffic-group /Common/traffic-group-1 { ha-group vpn_conn_2_up }
 	```
+
+
+17. *TROUBLESHOOTING* 
+
+
+	If you uploaded/edited the file ZebOS.conf directly, may need to load it into running config by running:
+
+	```
+    bigstart restart tmrouted
+	```  
+    
+    and optionally, restarting ipsec:
+
+	```
+    bigstart restart tmipsecd
+	```  
+
+	HINT: As a convenience, AWS also generates configs for above. *VPN Connections -> Download Config -> Vendor -> Select F5 Networks, Inc.*
+
+
+	Disclaimer: you need to add one additional parameter *nat-traversal on* to the ike-peer configs provided:
+
+	```
+	create net ipsec ike-peer PEER-NAME *nat-traversal on*  ....
+	``` 
 
 
 ### *Automated Instructions*

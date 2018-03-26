@@ -43,6 +43,7 @@
               "name":"aws_vpn_{{ connection }}_peer_{{ item.0 + 1 }}",
               "partition":"Common",
               "lifetime":"{{ (item.1.ike.lifetime|int / 60)| int | string }}",
+              "natTraversal": "on",
               "myIdType":"address",
               "peersIdType":"address",
               "phase1AuthMethod":"pre-shared-key",

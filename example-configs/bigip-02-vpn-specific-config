@@ -158,6 +158,7 @@ net vlan /Common/internal {
 }
 net ipsec ike-peer /Common/aws_vpn_conn_1_peer_1 {
     lifetime 480
+    nat-traversal on
     my-id-type address
     peers-id-type address
     phase1-auth-method pre-shared-key
@@ -169,6 +170,7 @@ net ipsec ike-peer /Common/aws_vpn_conn_1_peer_1 {
 }
 net ipsec ike-peer /Common/aws_vpn_conn_1_peer_2 {
     lifetime 480
+    nat-traversal on
     my-id-type address
     peers-id-type address
     phase1-auth-method pre-shared-key
@@ -180,6 +182,7 @@ net ipsec ike-peer /Common/aws_vpn_conn_1_peer_2 {
 }
 net ipsec ike-peer /Common/aws_vpn_conn_2_peer_1 {
     lifetime 480
+    nat-traversal on
     my-id-type address
     peers-id-type address
     phase1-auth-method pre-shared-key
@@ -191,6 +194,7 @@ net ipsec ike-peer /Common/aws_vpn_conn_2_peer_1 {
 }
 net ipsec ike-peer /Common/aws_vpn_conn_2_peer_2 {
     lifetime 480
+    nat-traversal on
     my-id-type address
     peers-id-type address
     phase1-auth-method pre-shared-key
