@@ -17,10 +17,8 @@ It also serves as a reference implementation.
 * Two F5 BIG-IPs running Local Traffic Manager (LTM)
   * The two BIG-IPs referred to in this repo are your "on-prem customer gateways")
   * Per AWS documentation, the addresses used for the customer gateways (BIG-IP Self IPs) could not sit behind a NAT (which precluded testing with BIG-IP VEs in AWS). 
-  
-  	***UPDATE***: AWS VPN now supports [NAT-T](https://aws.amazon.com/blogs/aws/ec2-vpc-vpn-update-nat-traversal-additional-encryption-options-and-more/) so you can:
-  		* Remove the publicly routable self-IPs
-  		* Change the tunnel local-address to a private address (ex. external self-ip) 
+
+  	***UPDATE***: AWS VPN now supports [NAT-T](https://aws.amazon.com/blogs/aws/ec2-vpc-vpn-update-nat-traversal-additional-encryption-options-and-more/) so you can remove the publicly routable self-IPs and change the tunnel local-address to a private address (ex. external self-ip).
 * Software version == BIG-IP v12.0.0+
   * Versions Tested so far: 
   	* BIG-IP v12.0.0 Build 0.0.606
@@ -134,6 +132,7 @@ For complete example configs of a clustered pair, see the example-configs direct
 	create net self 10.12.0.57 address 10.12.0.57/16 allow-service default traffic-group traffic-group-local-only vlan external
 
 	create net self 10.3.0.2 address 10.3.0.2/16 allow-service default traffic-group traffic-group-local-only vlan internal
+	```
 	
 	If not using NAT-T:
 
